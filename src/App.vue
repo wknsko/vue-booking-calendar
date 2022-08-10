@@ -2,16 +2,17 @@
   <div class="cal-body">
     <div @click="clickPrev()" class="arr arr-left">&lt;</div>
     <div class="cal">
-      <div v-for="(num, idx) in months(3)" :key="num">
+      <div v-for="(num, idx) in 3" :key="num">
         <div class="current-month month">
           <div class="year-month">
             <div class="year"> {{year}}</div>
-            <div class="monthWord">{{getThisMonthWord(month + idx)}}</div>
+            <div class="monthWord">{{ getThisMonthWord(this.month + idx > 12 ?
+            month + idx - 12 : month + idx)}}</div>
           </div>
           <div class="nums">
             <div class="num thisMonth" v-for="i in daysInMonth(month + idx)"
-              :class="month + idx === currMonth && year === currYear ? i <= day ? i < day ? 'past' : 'active' : 'current' : 'next-month'" :key="i"
-              @click="clickDateOne(parseInt(`${idx}00`) + i)" :id="parseInt(`${idx}00`) + i">
+              :class="month + idx === currMonth && year === currYear ? i <= day ? i < day ? 'past' : 'active' : 'current' : 'next-month'"
+              :key="i" @click="clickDateOne(parseInt(`${idx}00`) + i)" :id="parseInt(`${idx}00`) + i">
               {{i}}</div>
           </div>
         </div>
@@ -49,9 +50,9 @@ export default {
   },
   methods: {
   
-    months(i) {
-      return i;
-    },
+    
+    
+  
     betweenDates(start, end) {
       for (let i = start + 1; i <= end; i++) { 
         document.getElementById(i).classList.add('between-date');
@@ -71,7 +72,7 @@ export default {
       this.first = this.second = 0;
     },
     clickDateOne(id){
-     console.log(this.currMonth);
+     //console.log(this.currMonth);
       let selectedMonth = this.month + (id.toString().length < 3 ? 0 : parseInt(id.toString()[0]));
       //console.log(id.toString().length, selectedMonth);
       if(this.first === 0) {
@@ -103,7 +104,7 @@ export default {
       
     },
     clickPrev() {
-      if(this.month === this.currMonth && this.year === this.currYear) {
+      if(this.month <= this.currMonth && this.year <= this.currYear) {
         document.getElementsByClassName('arr-left')[0].style.disabled = 'disabled';
       } else {
       if (this.month === 1) {
@@ -117,13 +118,15 @@ export default {
       this.unselectDates();
     },
     clickNext() {
-      if(this.month === 10) {
-        
+      if (this.month >= 10) {
         this.month = 1;
         this.year++;
       } else {
         this.month += 3;
       }
+    
+    
+      
       this.unselectDates();
     },
 
